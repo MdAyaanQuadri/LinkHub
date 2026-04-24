@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | LinkHub</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar glass" style="border-radius: 0;">
+            <div class="logo">
+                <i data-lucide="link-2"></i>
+                LinkHub
+            </div>
+            
+            <nav style="flex: 1;">
+                <a href="#" class="nav-item active" id="nav-all">
+                    <i data-lucide="layout-grid"></i>
+                    All Links
+                </a>
+                <div style="margin-top: 2rem; margin-bottom: 1rem; padding: 0 1rem;">
+                    <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; letter-spacing: 1px;">Folders</span>
+                </div>
+                <div id="folders-list">
+                    <!-- Folders will be loaded here -->
+                </div>
+                <button class="btn btn-secondary" style="width: 100%; margin-top: 1rem; justify-content: flex-start; padding: 0.5rem 1rem;" onclick="showModal('folder-modal')">
+                    <i data-lucide="plus-circle" style="width: 18px;"></i>
+                    New Folder
+                </button>
+            </nav>
+
+            <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-glass);">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 700;" id="user-initial">
+                        U
+                    </div>
+                    <div style="overflow: hidden;">
+                        <div style="font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" id="user-name">User Name</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);" id="user-email">user@example.com</div>
+                    </div>
+                </div>
+                <a href="#" class="nav-item" onclick="auth.logout()">
+                    <i data-lucide="log-out"></i>
+                    Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <div>
+                    <div id="breadcrumbs" style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem; font-size: 0.85rem; color: var(--text-muted);">
+                        <!-- Breadcrumbs will be injected here -->
+                    </div>
+                    <h1 id="view-title" style="font-size: 2rem; font-weight: 700;">All Links</h1>
+                    <p id="view-subtitle" style="color: var(--text-muted);">Manage and organize your saved links.</p>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button class="btn btn-secondary" onclick="showModal('folder-modal')">
+                        <i data-lucide="folder-plus"></i>
+                        New Folder
+                    </button>
+                    <button class="btn btn-primary" id="add-link-btn" onclick="showModal('link-modal')">
+                        <i data-lucide="plus"></i>
+                        Add New Link
+                    </button>
+                </div>
+            </header>
+
+            <div style="display: flex; gap: 1rem; margin-bottom: 2rem; align-items: center;">
+                <div class="glass" style="padding: 0.5rem 1rem; display: flex; align-items: center; gap: 1rem; flex: 1; max-width: 500px;">
+                    <i data-lucide="search" style="color: var(--text-muted); width: 20px;"></i>
+                    <input type="text" id="search-input" placeholder="Search in this folder..." style="background: none; border: none; color: var(--text-main); width: 100%; outline: none; font-family: inherit;">
+                </div>
+            </div>
+
+            <div class="link-grid" id="link-grid">
+                <!-- Links will be loaded here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="folder-modal">
+        <div class="modal glass">
+            <div class="modal-header">
+                <h2>Create New Folder</h2>
+                <button class="btn btn-secondary" style="padding: 0.5rem;" onclick="hideModal('folder-modal')">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form id="folder-form">
+                <div class="form-group">
+                    <label class="form-label">Folder Name</label>
+                    <input type="text" id="folder-name" class="form-input" placeholder="e.g. Design Inspiration" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description (Optional)</label>
+                    <input type="text" id="folder-desc" class="form-input" placeholder="What's this folder for?">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Create Folder</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="link-modal">
+        <div class="modal glass">
+            <div class="modal-header">
+                <h2>Add New Link</h2>
+                <button class="btn btn-secondary" style="padding: 0.5rem;" onclick="hideModal('link-modal')">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form id="link-form">
+                <div class="form-group">
+                    <label class="form-label">URL</label>
+                    <input type="url" id="link-url" class="form-input" placeholder="https://example.com" required>
+                </div>
+                <div class="form-group" id="title-field" style="display: none;">
+                    <label class="form-label">Title (Scraper failed, please enter manually)</label>
+                    <input type="text" id="link-title" class="form-input" placeholder="e.g. My Favorite Design Tool">
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.5rem;">Link will be added to the current folder.</p>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Save Link</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="alert-modal">
+        <div class="modal glass alert-modal">
+            <i data-lucide="alert-circle" style="width: 48px; height: 48px; color: var(--danger); margin-bottom: 1rem;"></i>
+            <h3 id="alert-title">Attention</h3>
+            <p id="alert-message">Something went wrong.</p>
+            <button class="btn btn-secondary" style="width: 100%;" onclick="hideModal('alert-modal')">Go Back</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="confirm-modal">
+        <div class="modal glass alert-modal" style="border-top-color: var(--primary) !important;">
+            <i data-lucide="help-circle" style="width: 48px; height: 48px; color: var(--primary); margin-bottom: 1rem;"></i>
+            <h3 id="confirm-title">Are you sure?</h3>
+            <p id="confirm-message">This action cannot be undone.</p>
+            <div style="display: flex; gap: 1rem;">
+                <button class="btn btn-secondary" style="flex: 1;" onclick="hideModal('confirm-modal')">Cancel</button>
+                <button class="btn btn-primary" style="flex: 1; background: var(--danger);" id="confirm-yes">Yes, Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        lucide.createIcons();
+        
+        function showModal(id) {
+            document.getElementById(id).style.display = 'flex';
+            if (id === 'link-modal') {
+                document.getElementById('title-field').style.display = 'none';
+                document.getElementById('link-title').required = false;
+            }
+        }
+        
+        function hideModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        function showAlert(message, title = 'Attention') {
+            document.getElementById('alert-title').textContent = title;
+            document.getElementById('alert-message').textContent = message;
+            showModal('alert-modal');
+        }
+
+        function showConfirm(message, onConfirm, title = 'Are you sure?') {
+            document.getElementById('confirm-title').textContent = title;
+            document.getElementById('confirm-message').textContent = message;
+            const yesBtn = document.getElementById('confirm-yes');
+            
+            // Remove old listeners to prevent multiple executions
+            const newYesBtn = yesBtn.cloneNode(true);
+            yesBtn.parentNode.replaceChild(newYesBtn, yesBtn);
+            
+            newYesBtn.onclick = () => {
+                onConfirm();
+                hideModal('confirm-modal');
+            };
+            showModal('confirm-modal');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

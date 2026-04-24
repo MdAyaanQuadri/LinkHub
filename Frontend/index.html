@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkHub | Organize Your Digital World</title>
+    <meta name="description" content="LinkHub is the most elegant way to save, organize, and share your favorite links.">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <header class="glass" style="margin: 1.5rem; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 1.5rem; z-index: 100;">
+        <div class="logo" style="margin-bottom: 0;">
+            <i data-lucide="link-2"></i>
+            LinkHub
+        </div>
+        <nav style="display: flex; gap: 2rem; align-items: center;">
+            <a href="#features" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem;">Features</a>
+            <a href="login.html" class="btn btn-secondary" style="padding: 0.5rem 1.25rem;">Login</a>
+            <a href="signup.html" class="btn btn-primary" style="padding: 0.5rem 1.25rem;">Get Started</a>
+        </nav>
+    </header>
+
+    <main>
+        <section style="padding: 8rem 2rem; text-align: center; max-width: 900px; margin: 0 auto;" class="animate-fade-in">
+            <h1 style="font-size: 4rem; line-height: 1.1; margin-bottom: 1.5rem; font-weight: 800;">
+                Organize your <span style="background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">digital world</span> in one place.
+            </h1>
+            <p style="font-size: 1.25rem; color: var(--text-muted); margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Save links, create folders, and share your collections with a single click. Elegant, fast, and secure.
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <a href="signup.html" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem;">
+                    Join LinkHub
+                    <i data-lucide="arrow-right"></i>
+                </a>
+                <a href="#features" class="btn btn-secondary" style="padding: 1rem 2rem; font-size: 1.1rem;">Explore Features</a>
+            </div>
+        </section>
+
+        <section id="features" style="padding: 6rem 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto;">
+            <div class="glass" style="padding: 2.5rem;">
+                <div style="width: 50px; height: 50px; background: rgba(99, 102, 241, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--primary); margin-bottom: 1.5rem;">
+                    <i data-lucide="folder-plus"></i>
+                </div>
+                <h3 style="margin-bottom: 1rem; font-size: 1.5rem;">Smart Folders</h3>
+                <p style="color: var(--text-muted);">Organize your links into beautiful folders with custom icons and categories.</p>
+            </div>
+            <div class="glass" style="padding: 2.5rem;">
+                <div style="width: 50px; height: 50px; background: rgba(168, 85, 247, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--accent); margin-bottom: 1.5rem;">
+                    <i data-lucide="share-2"></i>
+                </div>
+                <h3 style="margin-bottom: 1rem; font-size: 1.5rem;">Instant Sharing</h3>
+                <p style="color: var(--text-muted);">Share entire folders with your team or the public with a single unique link.</p>
+            </div>
+            <div class="glass" style="padding: 2.5rem;">
+                <div style="width: 50px; height: 50px; background: rgba(34, 197, 94, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--success); margin-bottom: 1.5rem;">
+                    <i data-lucide="zap"></i>
+                </div>
+                <h3 style="margin-bottom: 1rem; font-size: 1.5rem;">Lightning Fast</h3>
+                <p style="color: var(--text-muted);">Access your links from anywhere with a performance-optimized experience.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer style="padding: 4rem 2rem; text-align: center; color: var(--text-muted); border-top: 1px solid var(--border-glass); margin-top: 4rem;">
+        <p>&copy; 2024 LinkHub. Crafted for the modern web.</p>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

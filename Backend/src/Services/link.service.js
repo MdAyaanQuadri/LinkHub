@@ -29,6 +29,11 @@ export const createLinkForUser = async (userId, { url, title, description, folde
     metadata = await scrapeUrl(url);
   }
 
+  // If no title provided and scraper failed to find one, ask the user to provide it
+  if (!title && !metadata.title) {
+    throw new ServiceError("Metadata scraping failed. Please provide a title manually.", 422);
+  }
+
   return Link.create({
     url,
     title: title || metadata.title,
@@ -41,12 +46,14 @@ export const createLinkForUser = async (userId, { url, title, description, folde
   });
 };
 
-export const getLinksForUser = async (userId, { folder, search, favorites }) => {
+export const getLinksForUser = async (userId, { folder, folderId, search, favorites }) => {
   const query = { userId };
 
-  if (folder && folder !== "null") {
-    query.folderId = folder;
-  } else if (folder === "null") {
+  const targetFolder = folderId || folder;
+
+  if (targetFolder && targetFolder !== "null") {
+    query.folderId = targetFolder;
+  } else if (targetFolder === "null") {
     query.folderId = null;
   }
 

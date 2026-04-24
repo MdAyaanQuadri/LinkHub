@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shared Collection | LinkHub</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <header class="glass"
+        style="margin: 1.5rem; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center;">
+        <div class="logo" style="margin-bottom: 0;">
+            <i data-lucide="link-2"></i>
+            LinkHub
+        </div>
+        <a href="signup.html" class="btn btn-primary" style="padding: 0.5rem 1.25rem;">Create Your Own Hub</a>
+    </header>
+
+    <main class="main-content" style="max-width: 1200px; margin: 0 auto; padding-top: 0;">
+        <div style="margin-bottom: 3rem; text-align: center; padding: 4rem 2rem;">
+            <h1 id="folder-name" style="font-size: 3rem; margin-bottom: 1rem;">Loading...</h1>
+            <p id="folder-desc" style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
+                Please wait while we fetch this collection.</p>
+        </div>
+
+        <div class="link-grid" id="link-grid">
+            <!-- Content will be loaded here -->
+        </div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script>
+        lucide.createIcons();
+
+        const params = new URLSearchParams(window.location.search);
+        const folderId = params.get('id');
+
+        if (!folderId) {
+            document.getElementById('folder-name').textContent = 'Invalid Link';
+            document.getElementById('folder-desc').textContent = 'This share link seems to be broken.';
+        } else {
+            loadSharedFolder(folderId);
+        }
+
+        async function loadSharedFolder(id) {
+            try {
+                const response = await api.get(`/folders/public/${id}`);
+                const { folder, subfolders, links } = response.data;
+
+                document.getElementById('folder-name').textContent = folder.name;
+                document.getElementById('folder-desc').textContent = folder.description || 'A collection of useful links shared via LinkHub.';
+
+                renderContent(subfolders, links);
+            } catch (err) {
+                document.getElementById('folder-name').textContent = 'Private or Not Found';
+                document.getElementById('folder-desc').textContent = 'This folder might be private or does not exist.';
+            }
+        }
+
+        function renderContent(folders, links) {
+            const grid = document.getElementById('link-grid');
+            grid.innerHTML = '';
+
+            folders.forEach(folder => {
+                const card = document.createElement('div');
+                card.className = 'link-card folder-card glass animate-fade-in';
+                card.innerHTML = `
+                    <div class="link-content">
+                        <div class="link-card-header">
+                            <div class="link-icon" style="background: rgba(99, 102, 241, 0.1);">
+                                <i data-lucide="folder" style="width: 20px; color: var(--primary);"></i>
+                            </div>
+                        </div>
+                        <h3 class="link-card-title">${folder.name}</h3>
+                        <p class="link-card-url" style="margin-bottom: 0;">Folder</p>
+                    </div>
+                `;
+                card.onclick = () => window.location.href = `shared.html?id=${folder._id}`;
+                grid.appendChild(card);
+            });
+
+            links.forEach(link => {
+                const card = document.createElement('div');
+                card.className = 'link-card glass animate-fade-in';
+
+                const thumbnailHtml = link.previewImage
+                    ? `<img src="${link.previewImage}" class="link-thumbnail" onerror="this.style.display='none'">`
+                    : `<div class="link-thumbnail" style="display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.02);">
+                         <i data-lucide="globe" style="width: 32px; color: var(--text-muted); opacity: 0.3;"></i>
+                       </div>`;
+
+                card.innerHTML = `
+                    ${thumbnailHtml}
+                    <div class="link-content">
+                        <div class="link-card-header">
+                            <div class="link-icon">
+                                <i data-lucide="external-link" style="width: 18px; color: var(--primary);"></i>
+                            </div>
+                        </div>
+                        <h3 class="link-card-title">${link.title || 'Untitled Link'}</h3>
+                        <p class="link-card-url">${link.url}</p>
+                        <div style="margin-top: auto; padding-top: 1rem; display: flex; justify-content: flex-end;">
+                            <a href="${link.url}" target="_blank" class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.4rem 0.8rem;">
+                                Visit Site
+                            </a>
+                        </div>
+                    </div>
+                `;
+                card.onclick = () => window.open(link.url, '_blank');
+                grid.appendChild(card);
+            });
+
+            lucide.createIcons();
+        }
+    </script>
+</body>
+
+</html>

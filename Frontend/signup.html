@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | LinkHub</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body style="display: flex; align-items: center; justify-content: center; padding: 2rem;">
+    <div class="glass animate-fade-in" style="width: 100%; max-width: 450px; padding: 3rem;">
+        <div style="text-align: center; margin-bottom: 2.5rem;">
+            <div class="logo" style="justify-content: center; margin-bottom: 0.5rem;">
+                <i data-lucide="link-2"></i>
+                LinkHub
+            </div>
+            <p style="color: var(--text-muted);">Create your account to start organizing.</p>
+        </div>
+
+        <form id="signup-form">
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <input type="text" id="username" class="form-input" placeholder="johndoe" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" id="email" class="form-input" placeholder="john@example.com" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                Create Account
+                <i data-lucide="user-plus"></i>
+            </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 2rem; font-size: 0.9rem; color: var(--text-muted);">
+            Already have an account? <a href="login.html" style="color: var(--primary); text-decoration: none; font-weight: 500;">Login here</a>
+        </div>
+    </div>
+
+    <!-- Alert Modal -->
+    <div class="modal-overlay" id="alert-modal">
+        <div class="modal glass alert-modal">
+            <i data-lucide="alert-circle" style="width: 48px; height: 48px; color: var(--danger); margin-bottom: 1rem;"></i>
+            <h3 id="alert-title">Attention</h3>
+            <p id="alert-message">Something went wrong.</p>
+            <button class="btn btn-secondary" style="width: 100%;" onclick="hideModal('alert-modal')">Go Back</button>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        lucide.createIcons();
+
+        function showModal(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
+        
+        function hideModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        function showAlert(message, title = 'Attention') {
+            document.getElementById('alert-title').textContent = title;
+            document.getElementById('alert-message').textContent = message;
+            showModal('alert-modal');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                event.target.style.display = 'none';
+            }
+        }
+        
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                await auth.signup({ username, email, password });
+                window.location.href = 'dashboard.html';
+            } catch (err) {
+                showAlert(err.message);
+            }
+        });
+    </script>
+</body>
+</html>

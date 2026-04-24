@@ -9,7 +9,7 @@ import userRoutes from "./Routes/user.routes.js";
 const app = express();
 
 // Middlewares
-app.use(cors({ origin: CLIENT_URL }));
+app.use(cors({ origin: "*" }));
 app.use(express.json());
 
 // Health check
